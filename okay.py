@@ -6,7 +6,7 @@ def main():
     url=urllib.request.urlopen("https://www.google.com/")
     data=url.read()
     soup=BeautifulSoup(data,"html.parser")
-    print(soup.prettify())
+    print(soup.find_all('td'))
 
 main()
 
