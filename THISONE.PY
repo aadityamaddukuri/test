@@ -4,9 +4,10 @@ import WazeRouteCalculator as wrc
 wb=load_workbook('rawdata.xlsx')
 sheet_ranges=wb['rawdata']
 ws2=wb['output']
-
+ws3=wb['output_speed']
+region="NA"
 #for loop iterates down the rawdata sheet, using latitude and longitude as start/end points
-for i in range (7,34):
+for i in range (6,16):
     start_lat=round((sheet_ranges['P'+ str(i)].value),3)
     start_lon=round((sheet_ranges['Q'+ str(i)].value),3)
     from_address=str(start_lat)+" "+str(start_lon)
@@ -18,7 +19,7 @@ for i in range (7,34):
  
     time=0
     time_increment=15
-    time_total=135
+    time_total=60
     #time, time_increment, time_total are used for this while loop, and finds traffic as a measure of time. 
     #When same code is replaced by a for loop it doesnt work. Don't know why.
     while time <=time_total:
@@ -29,6 +30,12 @@ for i in range (7,34):
         ws2["A"+str(i-4)]=from_address
         ws2["B"+str(i-4)]=to_address
         ws2["C"+str(i-4)] = float(str(distance))
-        ws2[(chr(ord('D')+int(time/time_increment)))+str(i-4)] =float(str(timetaken)) #time/time_increment used to iterate down the alphabet
+        ws2[(chr(ord('D')+int(time/time_increment)))+str(i-4)] =float(str(timetaken))
+        #ws2 gives "raw" data-- time n distance
+        #ws3 gives speed at each time
+        ws3["A"+str(i-4)]=from_address
+        ws3["B"+str(i-4)]=to_address
+        ws3[(chr(ord('C')+int(time/time_increment)))+str(i-4)] =float(60*(distance/timetaken))  
+        #time/time_increment used to iterate down the alphabet
         wb.save('rawdata.xlsx')
         time=time+time_increment
